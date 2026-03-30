@@ -51,7 +51,7 @@ class AppTheme {
       textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme).apply(
         bodyColor: textColor,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardColor,
         elevation: 8,
         shadowColor: ThemeColors.primaryBlue.withOpacity(0.15),
