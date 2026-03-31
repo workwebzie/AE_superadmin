@@ -2,19 +2,23 @@ class Client {
   final String id;
   final String name;
   final String email;
-  final String phone;
-  final String details;
+  final String adminEmail;
+  final String baseUrl;
+  final String companyCode;
   final DateTime subscriptionStart;
   final int subscriptionDurationDays;
+  final String subscriptionPlan;
 
   Client({
     required this.id,
     required this.name,
     required this.email,
-    required this.phone,
-    required this.details,
+    required this.adminEmail,
+    required this.baseUrl,
+    required this.companyCode,
     required this.subscriptionStart,
     required this.subscriptionDurationDays,
+    this.subscriptionPlan = 'AE Free',
   });
 
   DateTime get expiryDate {
@@ -37,19 +41,23 @@ class Client {
     String? id,
     String? name,
     String? email,
-    String? phone,
-    String? details,
+    String? adminEmail,
+    String? baseUrl,
+    String? companyCode,
     DateTime? subscriptionStart,
     int? subscriptionDurationDays,
+    String? subscriptionPlan,
   }) {
     return Client(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      phone: phone ?? this.phone,
-      details: details ?? this.details,
+      adminEmail: adminEmail ?? this.adminEmail,
+      baseUrl: baseUrl ?? this.baseUrl,
+      companyCode: companyCode ?? this.companyCode,
       subscriptionStart: subscriptionStart ?? this.subscriptionStart,
       subscriptionDurationDays: subscriptionDurationDays ?? this.subscriptionDurationDays,
+      subscriptionPlan: subscriptionPlan ?? this.subscriptionPlan,
     );
   }
 }

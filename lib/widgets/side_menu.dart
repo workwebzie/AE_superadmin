@@ -19,22 +19,14 @@ class SideMenu extends StatelessWidget {
       backgroundColor: AppTheme.bgColor,
       child: Column(
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppTheme.accentColor.withOpacity(0.1))),
+       Image.asset(
+              "assets/images/logo.png",
+              height:100,
+             
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/logo.png",
-                  height:100,
-                  color: AppTheme.primaryColor,
-                ),
+            SizedBox(height: 30
+            ),
            
-              ],
-            ),
-          ),
           _DrawerListTile(
             title: "Dashboard",
             icon: Icons.dashboard,

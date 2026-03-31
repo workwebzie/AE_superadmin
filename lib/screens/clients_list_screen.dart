@@ -54,7 +54,44 @@ class ClientsListScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+          Obx(() {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: ['All', 'Active', 'Near Expiry', 'Expired'].map((status) {
+                  final isSelected = controller.statusFilter.value == status;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ChoiceChip(
+
+                      label: Text(status),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          controller.updateStatusFilter(status);
+                        }
+                      },
+                      selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                      labelStyle: TextStyle(
+                        color: isSelected ? AppTheme.primaryColor : AppTheme.fadedTextColor,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                      backgroundColor: AppTheme.cardColor,
+                      showCheckmark: false,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      side: BorderSide(
+                        color : AppTheme.accentColor.withOpacity(0.3),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          }),
+          const SizedBox(height: 16),
           Expanded(
             child: Obx(() {
               final clients = controller.filteredClients;
@@ -130,8 +167,13 @@ class _ClientCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      client.phone,
+                      'Company Code: ${client.companyCode}',
                       style: const TextStyle(color: AppTheme.fadedTextColor, fontSize: 13),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      client.baseUrl,
+                      style: const TextStyle(color: AppTheme.accentColor, fontSize: 13, decoration: TextDecoration.underline),
                     ),
                   ],
                 ),
@@ -180,21 +222,43 @@ class _ClientCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: getStatusColor(client.status).withOpacity(0.1),
-                    border: Border.all(color: getStatusColor(client.status).withOpacity(0.5)),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    client.status,
-                    style: TextStyle(
-                      color: getStatusColor(client.status),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppTheme.accentColor.withOpacity(0.1),
+                        border: Border.all(color: AppTheme.accentColor.withOpacity(0.5)),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        client.subscriptionPlan,
+                        style: const TextStyle(
+                          color: AppTheme.accentColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: getStatusColor(client.status).withOpacity(0.1),
+                        border: Border.all(color: getStatusColor(client.status).withOpacity(0.5)),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        client.status,
+                        style: TextStyle(
+                          color: getStatusColor(client.status),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 Text(

@@ -62,31 +62,35 @@ class DashboardScreen extends StatelessWidget {
                       mainAxisSpacing: 16,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      childAspectRatio: width < 600 ? 2 : 1.5,
+                      childAspectRatio: width < 600 ? 2 : 2.8,
                       children: [
                         _StatCard(
                           title: 'Total Clients',
                           value: controller.totalClients.toString(),
                           icon: Icons.group,
                           color: AppTheme.primaryColor,
+                          filter: 'All',
                         ),
                         _StatCard(
                           title: 'Active Subs',
                           value: controller.activeClients.toString(),
                           icon: Icons.check_circle_outline,
                           color: AppTheme.successColor,
+                          filter: 'Active',
                         ),
                         _StatCard(
                           title: 'Near Expiry!',
                           value: controller.nearExpiryClients.toString(),
                           icon: Icons.warning_amber_rounded,
                           color: AppTheme.warningColor,
+                          filter: 'Near Expiry',
                         ),
                         _StatCard(
                           title: 'Expired Subs',
                           value: controller.expiredClients.toString(),
                           icon: Icons.error_outline,
                           color: AppTheme.errorColor,
+                          filter: 'Expired',
                         ),
                       ],
                     ),
@@ -124,6 +128,9 @@ class DashboardScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                     const SizedBox(height: 50),
+                    const Text('powered By WorkFox', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold , color: Colors.grey),textAlign: TextAlign.center,),
+                    const SizedBox(height: 16),
                   ],
                 );
               });
@@ -140,19 +147,23 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final String filter;
 
   const _StatCard({
     required this.title,
     required this.value,
     required this.icon,
     required this.color,
+    required this.filter,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.find<AppController>().changeTabIndex(1);
+        final ctrl = Get.find<AppController>();
+        ctrl.updateStatusFilter(filter);
+        ctrl.changeTabIndex(1);
       },
       child: Container(
         padding: const EdgeInsets.all(24),
@@ -171,7 +182,7 @@ class _StatCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

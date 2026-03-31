@@ -7,6 +7,7 @@ class AppController extends GetxController {
   final RxList<Client> clients = <Client>[].obs;
   
   final RxString searchQuery = ''.obs;
+  final RxString statusFilter = 'All'.obs;
   
   final RxInt tabIndex = 0.obs;
 
@@ -20,28 +21,34 @@ class AppController extends GetxController {
         id: '1',
         name: 'Alice Cooper',
         email: 'alice@example.com',
-        phone: '123-456-7890',
-        details: 'Premium App Template',
+        adminEmail: 'admin@example.com',
+        baseUrl: 'https://app1.example.com',
+        companyCode: 'CMP001',
         subscriptionStart: now.subtract(const Duration(days: 30)),
         subscriptionDurationDays: 365,
+        subscriptionPlan: 'AE Advanced',
       ),
       Client(
         id: '2',
         name: 'Bob Ross',
         email: 'bob@example.com',
-        phone: '098-765-4321',
-        details: 'E-commerce platform',
+        adminEmail: 'bob.admin@example.com',
+        baseUrl: 'https://ecom.example.com',
+        companyCode: 'ECOMM2',
         subscriptionStart: now.subtract(const Duration(days: 300)),
         subscriptionDurationDays: 305, // near expiry
+        subscriptionPlan: 'AE Pro',
       ),
       Client(
         id: '3',
         name: 'Charlie Chaplin',
         email: 'charlie@example.com',
-        phone: '555-555-5555',
-        details: 'Social network app',
+        adminEmail: 'charlie@example.com',
+        baseUrl: 'https://social.example.com',
+        companyCode: 'SOC3',
         subscriptionStart: now.subtract(const Duration(days: 360)),
         subscriptionDurationDays: 300, // expired
+        subscriptionPlan: 'AE Free',
       )
     ]);
   }
@@ -64,6 +71,10 @@ class AppController extends GetxController {
     searchQuery.value = query;
   }
 
+  void updateStatusFilter(String status) {
+    statusFilter.value = status;
+  }
+
   void changeTabIndex(int index) {
     tabIndex.value = index;
   }
@@ -81,11 +92,17 @@ class AppController extends GetxController {
   }
 
   List<Client> get filteredClients {
-    if (searchQuery.value.isEmpty) return clients;
-    return clients.where((client) {
-      return client.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          client.email.toLowerCase().contains(searchQuery.value.toLowerCase());
-    }).toList();
+    var result = clients.toList();
+    if (statusFilter.value != 'All') {
+      result = result.where((c) => c.status == statusFilter.value).toList();
+    }
+    if (searchQuery.value.isNotEmpty) {
+      result = result.where((client) {
+        return client.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
+            client.email.toLowerCase().contains(searchQuery.value.toLowerCase());
+      }).toList();
+    }
+    return result;
   }
 
   int get totalClients => clients.length;
